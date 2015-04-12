@@ -24,17 +24,27 @@ public class NoteListItemAdapter extends RecyclerView.Adapter<NoteListItemAdapte
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        return null;
+        View v = LayoutInflater.from(mContext).inflate(R.layout.note_list_item, viewGroup, false);
+        v.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Get the position of v
+                // Call the removeItem method with the position
+                removeItem(mRecyclerView.getChildAdapterPosition(v));
+            }
+        });
+        return new ViewHolder(v);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int i) {
-
+        NoteListItem noteListItem = mNoteListItems.get(i);
+        viewHolder.setText(noteListItem.getText());
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return mNoteListItems.size();
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
@@ -48,5 +58,15 @@ public class NoteListItemAdapter extends RecyclerView.Adapter<NoteListItemAdapte
         public void setText(String text) {
             this.text.setText(text);
         }
+    }
+
+    public void addItem(NoteListItem item) {
+        mNoteListItems.add(0, item);
+        notifyItemInserted(0);
+    }
+
+    public void removeItem(int position) {
+        mNoteListItems.remove(position);
+        notifyItemRemoved(position);
     }
 }
